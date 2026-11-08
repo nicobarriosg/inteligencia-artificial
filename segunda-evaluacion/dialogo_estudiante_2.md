@@ -5,6 +5,7 @@ Lo que dice [Nombre estudiante 2] mientras escribe el código, bloque por bloque
 ## Cómo usar este diálogo
 
 - Cada paso está dividido en bloques chicos de código. Escribes el bloque mientras dices el texto de **Mientras escribes**. Después ejecutas y dices el texto de **Cuando sale el resultado**.
+- **Ejecuta todas las celdas, en orden, aunque no muestren nada** (pasos 2 y 10): las celdas siguientes usan lo que definen. La marca ▶ indica el momento exacto de ejecutar.
 - **Todos los bloques de un paso van en la misma celda.** La división es solo para saber qué decir mientras escribes cada parte. Escribe el primer bloque, sigue con el siguiente en la misma celda y ejecuta una sola vez al final del paso (Shift + Enter). Es una celda por paso, como en `phishing_en_vivo.ipynb`.
 - Lo que va en cursiva y entre paréntesis es una acción, no se dice.
 - **Los números pueden cambiar un poco en Colab** (otra versión de TensorFlow y GPU). Di los que salgan en pantalla, no los de esta guía.
@@ -35,6 +36,8 @@ print("GPU disponible:", tf.config.list_physical_devices('GPU'))
 
 **Mientras escribes:**
 Hola, soy [Nombre estudiante 2] y voy a construir la solución en vivo. **Estoy en Google Colab, con la GPU activada**: la GPU acelera los cálculos de la red, que se repiten por cada palabra del correo. Colab ya trae TensorFlow, scikit-learn y pandas. Con %pip me aseguro de tener kagglehub, que descarga el dataset directo desde Kaggle. Después importo TensorFlow y reviso la versión y si hay GPU.
+
+▶ *Ejecuta la celda (Shift + Enter).*
 
 **Cuando sale el resultado:**
 Aquí está la versión de TensorFlow y la GPU que asignó Colab.
@@ -69,6 +72,8 @@ keras.utils.set_random_seed(42)   # resultados repetibles
 **Mientras escribes:**
 De Keras uso las capas para armar la red. De scikit-learn uso tres cosas: separar los datos, el modelo simple de comparación y las métricas. Y **fijo una semilla, para que el experimento se pueda repetir**.
 
+▶ *Ejecuta la celda (Shift + Enter).*
+
 **Cuando sale el resultado:** no hay salida; sigo.
 
 ## Paso 3 · Cargar los datos · 1:05–1:35
@@ -83,6 +88,8 @@ datos.head()
 
 **Mientras escribes:**
 Descargo el dataset Phishing Email Detection, de Kaggle, y lo leo como tabla. Me quedo con dos columnas: el texto del correo, que es la entrada, y el tipo, que es lo que quiero predecir. **Cada correo trae su respuesta correcta: por eso es aprendizaje supervisado.**
+
+▶ *Ejecuta la celda (Shift + Enter).*
 
 **Cuando sale el resultado:**
 Estas son las primeras filas: el texto y su etiqueta, Safe Email o Phishing Email.
@@ -116,6 +123,8 @@ print((con_enron.groupby(datos['tipo']).mean() * 100).round(1))
 
 **Mientras escribes:**
 Y reviso una palabra sospechosa: enron, el nombre de una empresa.
+
+▶ *Ejecuta la celda (Shift + Enter).*
 
 **Cuando sale el resultado:**
 Hay 18.650 correos, 16 vacíos y 1.112 duplicados. **Los duplicados los voy a quitar**: un correo repetido podría quedar en entrenamiento y en prueba, y eso inflaría el resultado. Hay más seguros que fraudulentos, cerca de 6 de cada 10. No es un desbalance fuerte, pero por eso no me basta la exactitud: también voy a medir recall y precisión. La mediana es de 160 palabras.
@@ -161,6 +170,8 @@ print("\nEjemplo:", datos['limpio'].iloc[0][:150])
 **Mientras escribes:**
 Aplico la función a todos los correos. Quito los vacíos y **elimino duplicados después de limpiar**, porque dos correos pueden quedar iguales recién al limpiarlos.
 
+▶ *Ejecuta la celda (Shift + Enter).*
+
 **Cuando sale el resultado:**
 Quedan 17.103 correos únicos: 10.661 seguros y 6.442 fraudulentos. Así se ve un correo limpio. **Esta misma función la voy a usar con los correos nuevos del final**: el modelo tiene que recibir siempre el mismo formato.
 
@@ -185,6 +196,8 @@ print("Entrenamiento:", len(X_ent), "| Validación:", len(X_val), "| Prueba:", l
 
 **Mientras escribes:**
 Primero aparto el 20% para la prueba final. Del resto, aparto un 15% para validación. Con stratify, cada parte mantiene la misma proporción de fraudes.
+
+▶ *Ejecuta la celda (Shift + Enter).*
 
 **Cuando sale el resultado:**
 Quedan 11.629 para entrenar, 2.053 para validar y 3.421 para la prueba. **Con el entrenamiento la red aprende. La validación vigila el sobreajuste. Y la prueba son correos que la red no ve hasta el final.**
@@ -214,6 +227,8 @@ print("Números:", X_ent_num[0][:10].numpy())
 **Mientras escribes:**
 Convierto los tres grupos y muestro un ejemplo.
 
+▶ *Ejecuta la celda (Shift + Enter).*
+
 **Cuando sale el resultado:**
 Cada correo quedó como 200 números. *(señala el ejemplo)* Workshop aparece dos veces, y las dos veces es el 149. Los correos cortos se rellenan con ceros, y los largos se cortan en la palabra 200. Es el mismo ejemplo que mostró [Nombre estudiante 1].
 
@@ -236,6 +251,8 @@ print(classification_report(y_prueba, (prob_base >= 0.5).astype(int),
 
 **Mientras escribes:**
 Calculo la probabilidad de fraude en la prueba y muestro el reporte.
+
+▶ *Ejecuta la celda (Shift + Enter).*
 
 **Cuando sale el resultado:**
 El modelo simple ya logra una exactitud de 0,967 y detecta el 94% de los fraudes. **Esa es la vara que la LSTM tiene que superar.**
@@ -269,6 +286,8 @@ modelo.summary()
 **Mientras escribes:**
 Y al final, una neurona con sigmoide, que entrega la probabilidad de fraude, entre 0 y 1. Veo el resumen.
 
+▶ *Ejecuta la celda (Shift + Enter).*
+
 **Cuando sale el resultado:**
 Son 1.313.089 parámetros, y casi todos están en el Embedding: 20.000 palabras por 64 valores. Es la arquitectura que explicó [Nombre estudiante 1].
 *(si aparece un aviso sobre mask)* Este aviso no es un error: la LSTM sí usa la máscara. Lo comprobamos en el ensayo.
@@ -288,6 +307,8 @@ modelo.compile(
 
 **Mientras escribes:**
 Configuro el entrenamiento. **La pérdida es la entropía cruzada binaria**, la que corresponde a una salida sigmoide. El optimizador es Adam: usa el gradiente del error, que se calcula con retropropagación, para ajustar cada peso. Además de la exactitud, mido **recall, porque un fraude que se escapa puede terminar en una clave robada**, y precisión, porque una falsa alarma puede esconder un correo legítimo.
+
+▶ *Ejecuta la celda (Shift + Enter).*
 
 **Cuando sale el resultado:** no hay salida; sigo.
 
@@ -316,6 +337,8 @@ historial = modelo.fit(
 **Mientras escribes:**
 Entreno con los correos de entrenamiento y valido con los de validación. Máximo 6 épocas, en lotes de 32 correos.
 
+▶ *Ejecuta la celda (Shift + Enter).*
+
 **Mientras entrena** *(con GPU puede tardar solo unos segundos por época; si termina antes, completa la idea mirando las líneas de cada época)*:
 Mientras entrena, explico qué pasa. La red toma 32 correos, calcula su probabilidad y la compara con la etiqueta real usando la pérdida. Luego **la retropropagación calcula cuánto aportó cada peso al error, y Adam ajusta los pesos un poco**. Eso se repite 364 veces por época. *(señala una línea)* loss es la pérdida en entrenamiento. val_loss es la pérdida en correos que no se usan para ajustar pesos. **Si loss baja y val_loss sube, la red está memorizando: eso es sobreajuste**, y ahí actúa la parada temprana.
 
@@ -337,6 +360,8 @@ plt.show()
 
 **Mientras pegas:**
 Este código solo dibuja los gráficos, así que lo pego.
+
+▶ *Ejecuta la celda (Shift + Enter).*
 
 **Cuando sale el resultado:**
 A la izquierda está la pérdida; a la derecha, la exactitud. La pérdida de entrenamiento tiende a bajar, aunque no en todas las épocas. Miro la de validación: la más baja fue en la época *(di cuál)*, y la parada temprana se quedó con esos pesos. **Si la validación sube mientras el entrenamiento baja, la red está memorizando: eso es sobreajuste.**
@@ -367,6 +392,8 @@ plt.show()
 
 **Mientras escribes:**
 Comparo el AUC y la exactitud con la regresión logística, y dibujo la matriz de confusión.
+
+▶ *Ejecuta la celda (Shift + Enter).*
 
 **Cuando sale el resultado:**
 La LSTM logra una exactitud de 0,967, un recall de fraude de 0,945 y un AUC de 0,991. *(señala la matriz)* La diagonal son aciertos. Abajo a la izquierda están los fraudes que se escaparon, y arriba a la derecha, las falsas alarmas.
@@ -428,6 +455,8 @@ for real, nombre, correo in correos:
 **Mientras escribes:**
 Recorro los cuatro y muestro la probabilidad, no solo la etiqueta.
 
+▶ *Ejecuta la celda (Shift + Enter).*
+
 **Cuando sale el resultado:**
 El del banco sale fraudulento, con 99%: urgencia, amenaza y enlace. El del paquete también, con 98%. El aviso académico sale seguro, como corresponde.
 *(señala la línea de soporte TI)* Y este es el importante. **Es un fraude bien escrito, sin amenazas ni urgencia, y el modelo lo deja pasar**, con 4%. Ese es su límite real. **Probablemente se debe al vocabulario académico**: en este dataset, palabras como university o students aparecen casi solo en correos seguros. Además, el modelo no analiza el remitente ni el dominio real del enlace.
@@ -443,6 +472,8 @@ print(f"De {vn+fp} correos seguros, {fp} ({fp/(vn+fp):.1%}) quedarían marcados 
 
 **Mientras escribes:**
 Por último, traduzco las métricas al problema que presentó [Nombre estudiante 1].
+
+▶ *Ejecuta la celda (Shift + Enter).*
 
 **Cuando sale el resultado:**
 De 1.289 correos fraudulentos, detectó 1.218, el 94,5%, y dejó pasar 71. De 2.132 correos seguros, 41 quedarían marcados por error, menos del 2%. **Para el área de TI, el modelo sirve como filtro de apoyo: lo marcado va a cuarentena para revisarlo, no se borra.** Y como algunos fraudes se escapan, no reemplaza la capacitación ni otros controles.
