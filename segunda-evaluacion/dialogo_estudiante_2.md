@@ -15,7 +15,7 @@ Lo que dice [Nombre estudiante 2] mientras escribe el código, bloque por bloque
 
 - [ ] VS Code con las extensiones **Python** y **Jupyter** de Microsoft.
 - [ ] Python con las bibliotecas instaladas. En una terminal, idealmente dentro de un entorno virtual: `pip install tensorflow scikit-learn pandas matplotlib kagglehub ipykernel`. En el computador donde se ensayó ya existe un entorno con todo: `~/.cache/ia-tfenv` (TensorFlow 2.22).
-- [ ] Crear un notebook **nuevo y vacío** (por ejemplo `phishing_en_vivo.ipynb`) y elegir el kernel con **Seleccionar kernel**, arriba a la derecha: el entorno que tiene TensorFlow. Para el entorno del ensayo: *Entornos de Python* → `~/.cache/ia-tfenv/bin/python`.
+- [ ] Abrir `phishing_en_vivo.ipynb`, que trae solo los títulos de cada paso y una celda de código vacía debajo de cada uno. Elegir el kernel con **Seleccionar kernel**, arriba a la derecha: el entorno que tiene TensorFlow. Para el entorno del ensayo: *Entornos de Python* → `~/.cache/ia-tfenv/bin/python`.
 - [ ] Ejecutar una vez la descarga del paso 3 antes de grabar, en otro notebook: kagglehub guarda el dataset en caché y en el video carga al instante.
 - [ ] Probablemente no hay GPU: la red entrena en el procesador. En el ensayo en CPU tomó poco más de un minuto (unos 17 segundos por época).
 - [ ] Subir el zoom (Ctrl y +) y usar un tema que se lea bien en video. Cerrar notificaciones y programas pesados.
