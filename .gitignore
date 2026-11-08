@@ -1,0 +1,9 @@
+# Modelos entrenados: se generan al ejecutar el notebook
+*.keras
+
+.ipynb_checkpoints/
+__pycache__/
+.DS_Store
+
+# Material de otro proyecto que no se publica
+segunda-evaluacion/guia_programacion_en_vivo.md
