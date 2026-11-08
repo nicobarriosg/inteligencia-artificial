@@ -75,17 +75,17 @@ Proyecto: detección de correos fraudulentos (phishing) con una red LSTM en Kera
 
 **Evidencia:** [Requisito del enunciado]
 
-### Google Colab con GPU T4
+### VS Code en un computador local
 
-**Qué hicimos:** El notebook está configurado para Colab con GPU T4 (*Entorno de ejecución → Cambiar tipo de entorno de ejecución → T4 GPU*). El paso 1 instala solo `kagglehub` (con `pip install -q`, que oculta el detalle de la instalación) e imprime la versión de TensorFlow y si hay GPU.
+**Qué hicimos:** El video se graba en VS Code, con un notebook de Jupyter y un entorno de Python que ya tiene TensorFlow, scikit-learn, pandas y matplotlib. El paso 1 instala solo `kagglehub` (con `%pip install -q`, que instala en el mismo entorno del notebook y oculta el detalle) e imprime la versión de TensorFlow y si hay GPU.
 
-**Por qué:** La LSTM repite sus cálculos palabra por palabra, y la GPU los acelera. Imprimir la versión y la GPU deja evidencia del entorno al inicio del video. Sin GPU el código funciona igual: en el ensayo en CPU (TensorFlow 2.22.0-rc0) el entrenamiento tomó poco más de 1 minuto. Las demás bibliotecas se importan sin instalarlas porque se asume que Colab ya las trae (inferencia: falta comprobarlo en Colab).
+**Por qué:** Es el entorno donde se ensayó: el notebook se ejecutó completo en un computador local, en CPU, con TensorFlow 2.22.0-rc0, y el entrenamiento tomó poco más de 1 minuto. La red es chica, así que no necesita GPU. Imprimir la versión y la GPU deja evidencia del entorno al inicio del video.
 
-**Alternativas que no usamos:** Un computador local: obliga a instalar todo y depende de la máquina de cada uno.
+**Alternativas que no usamos:** Google Colab con GPU: trae las bibliotecas instaladas y acelera la LSTM, pero depende de la conexión y de que el servicio asigne una GPU. El notebook también funciona ahí.
 
-**Si preguntan:** "Colab con GPU acelera la LSTM, pero no es obligatorio: en CPU entrenó en poco más de un minuto."
+**Si preguntan:** "Lo hicimos en VS Code, en el computador donde ensayamos. Si no hay GPU, la red igual entrena en CPU en poco más de un minuto, porque es chica."
 
-**Evidencia:** [Comprobado en ensayo] Ojo: todavía no se ejecuta en Colab ni se mide el tiempo con GPU. Hay que ensayarlo y cronometrarlo antes de grabar.
+**Evidencia:** [Comprobado en ensayo] Hay que ensayar y cronometrar en el computador con el que se va a grabar.
 
 ### Bibliotecas y estructura `Sequential`
 
@@ -135,13 +135,13 @@ Proyecto: detección de correos fraudulentos (phishing) con una red LSTM en Kera
 
 **Qué hicimos:** Usamos el dataset `subhajournal/phishingemails` (archivo `Phishing_Email.csv`, unos 52 MB), descargado con `kagglehub.dataset_download`. Renombramos `Email Text` → `texto` y `Email Type` → `tipo`, y nos quedamos solo con esas dos columnas. Con `datos.head()` se muestran las primeras 5 filas, que sirven para explicar la estructura de los datos, como pide el enunciado.
 
-**Por qué:** Es público, viene etiquetado (lo que exige el aprendizaje supervisado) y tiene 18.650 correos. En el ensayo se descargó sin cuenta de Kaggle, algo clave para programar en vivo sin credenciales, y su tamaño no es problema para Colab. Renombrar en español deja el código alineado con la explicación, y quedarse con dos columnas deja solo la entrada (texto) y lo que se quiere predecir (tipo).
+**Por qué:** Es público, viene etiquetado (lo que exige el aprendizaje supervisado) y tiene 18.650 correos. En el ensayo se descargó sin cuenta de Kaggle, algo clave para programar en vivo sin credenciales, y su tamaño (52 MB) no es problema para un computador normal. Renombrar en español deja el código alineado con la explicación, y quedarse con dos columnas deja solo la entrada (texto) y lo que se quiere predecir (tipo).
 
 **Alternativas que no usamos:** Correos reales de una empresa o de la universidad: no están etiquetados y contienen datos personales. Un dataset en español: no lo usamos en este proyecto y queda como mejora.
 
 **Si preguntan:** "Lo elegimos porque es público, viene etiquetado y se descarga en vivo sin cuenta. Conocemos sus límites y los tratamos."
 
-**Evidencia:** [Comprobado en ensayo] Plan B si falla la descarga: bajar el CSV desde la página de Kaggle, subirlo a Colab y leerlo con `pd.read_csv('Phishing_Email.csv')`.
+**Evidencia:** [Comprobado en ensayo] Plan B si falla la descarga: bajar el CSV desde la página de Kaggle, dejarlo en la carpeta del notebook y leerlo con `pd.read_csv('Phishing_Email.csv')`.
 
 ### Usarlo a pesar de sus limitaciones
 
@@ -882,7 +882,7 @@ Código del paso 11: `modelo.fit(X_ent_num, y_ent, validation_data=(X_val_num, y
 
 ### Guardar el vectorizador y la red en un solo archivo
 
-**Qué hicimos:** `modelo_completo = keras.Sequential([keras.Input(shape=(1,), dtype='string'), vectorizador, modelo])` y `modelo_completo.save('modelo_phishing.keras')`. En Colab, `files.download` descarga el archivo; fuera de Colab, el `try/except ImportError` evita que falle.
+**Qué hicimos:** `modelo_completo = keras.Sequential([keras.Input(shape=(1,), dtype='string'), vectorizador, modelo])` y `modelo_completo.save('modelo_phishing.keras')`. En VS Code el archivo queda en la carpeta del notebook; la descarga con `files.download` solo existe en Colab, y el `try/except ImportError` evita que esa línea falle.
 
 **Por qué:** El enunciado pide presentar nuevamente en la defensa el modelo completamente operativo: que reciba los datos, los procese y genere resultados coherentes. Juntar el vectorizador con la red hace que el archivo reciba texto directamente y traiga su propio vocabulario, así que no hay que volver a entrenar ni recrear el vocabulario.
 
@@ -1064,7 +1064,7 @@ Todas salen del notebook de respaldo, ejecutado en CPU local; en la grabación p
 - **Correos automáticos legítimos.** La conclusión del notebook advierte que puede marcar como fraude correos legítimos automáticos, como una recuperación de contraseña. Las pruebas del notebook no lo reproducen: es un riesgo razonable, no una medición.
 - **Fraudes actuales.** Pueden ser distintos a los de este dataset.
 - **Lo que el modelo no ve.** Solo lee las primeras 200 palabras; no ve el remitente ni el dominio de los enlaces; pierde números y símbolos, como un monto a pagar.
-- **Una sola ejecución.** No medimos cuánto varían las cifras entre ejecuciones, y el notebook todavía no se ejecuta en Colab con GPU.
+- **Una sola ejecución.** No medimos cuánto varían las cifras entre ejecuciones, y se ejecutó en un solo computador, en CPU.
 
 ---
 
