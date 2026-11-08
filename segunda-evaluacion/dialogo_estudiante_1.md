@@ -26,7 +26,7 @@ El correo es una herramienta central de trabajo, y también una de las puertas d
 
 ## Lámina 3 · El problema que queremos resolver · 1:20–2:10
 
-Ahora, el problema concreto. No hablamos de ciberseguridad en general. **Queremos clasificar cada correo que llega como seguro o fraudulento, a partir de su texto.** Y además, estimar qué tan probable es que sea fraude. *(sigue el flujo con la mano)* El correo entra al modelo y sale una probabilidad. Si es alta, el correo va a cuarentena y el área de TI lo revisa. Si es baja, llega a la bandeja de entrada. La organización puede ser una empresa o una universidad. Y esto es lo que necesita: **un filtro de apoyo, con revisión humana**. El filtro no borra nada por su cuenta.
+Ahora, el problema concreto. ¿Por qué existe? **Enviar miles de correos casi no cuesta, y al atacante le basta con que caiga una persona.** Además, el correo permite imitar remitentes y disfrazar enlaces. No hablamos de ciberseguridad en general. **Queremos clasificar cada correo que llega como seguro o fraudulento, a partir de su texto.** Y además, estimar qué tan probable es que sea fraude. *(sigue el flujo con la mano)* El correo entra al modelo y sale una probabilidad. Si es alta, el correo va a cuarentena y el área de TI lo revisa. Si es baja, llega a la bandeja de entrada. La organización puede ser una empresa o una universidad. Y esto es lo que necesita: **un filtro de apoyo, con revisión humana**. El filtro no borra nada por su cuenta.
 
 ## Lámina 4 · ¿A quién afecta y qué pasa si no hacemos nada? · 2:10–3:20
 
@@ -34,7 +34,7 @@ Ahora, el problema concreto. No hablamos de ciberseguridad en general. **Queremo
 
 ¿Y si no hacemos nada? *(sigue la cadena de consecuencias)* **Basta con que una sola persona caiga.** Con su clave, el atacante entra a la cuenta. Desde ahí puede robar datos o dinero, o atacar a otros desde adentro. Y revisar todo a mano no escala.
 
-*(señala las leyes)* Y hay un lado legal. En Chile están la Ley 21.663, marco de ciberseguridad, y la Ley 21.719, de protección de datos personales.
+*(señala las leyes)* Y hay un lado legal. En Chile, la Ley 21.663, marco de ciberseguridad, obliga a las instituciones que regula a reportar sus incidentes a la Agencia Nacional de Ciberseguridad. Y la Ley 21.719 exige proteger los datos personales. Un phishing exitoso deja de ser solo un problema técnico.
 
 *(señala las cifras)* Según la Fiscalía de Chile, en 2025 el 22% de los delitos ingresados fueron uso malicioso de tarjetas o claves, o estafas. Y la Fiscalía nombra el phishing entre las variantes de este fraude. [opcional] Además, según la Agencia Nacional de Ciberseguridad, al cierre de 2025 había 3.258 instituciones inscritas para reportarle incidentes.
 
@@ -48,7 +48,7 @@ Para estudiar el problema usamos un dataset público de Kaggle, Phishing Email D
 
 ## Lámina 6 · ¿Por qué usar Inteligencia Artificial? · 4:15–5:00
 
-¿Por qué Inteligencia Artificial y no reglas fijas? *(señala la columna izquierda)* Una regla fija sería una lista de palabras prohibidas o un filtro por remitente. El problema es que **el atacante cambia una palabra y pasa**. *(señala la columna derecha)* Un modelo, en cambio, aprende de miles de ejemplos. Reconoce patrones como la urgencia, las amenazas, los pedidos de clave o los enlaces. Y no entrega solo un sí o un no: **entrega una probabilidad**. Con ese número, la organización decide cuánto riesgo acepta. [opcional] Y si los ataques cambian, el modelo se puede volver a entrenar con correos nuevos.
+¿Por qué Inteligencia Artificial y no reglas fijas? *(señala la columna izquierda)* Una regla fija sería una lista de palabras prohibidas o un filtro por remitente. El problema es que **el atacante cambia una palabra y pasa**. *(señala la columna derecha)* Un modelo, en cambio, aprende de miles de ejemplos. Reconoce patrones como la urgencia, las amenazas o los pedidos de clave. Y no entrega solo un sí o un no: **entrega una probabilidad**. Con ese número, la organización decide cuánto riesgo acepta. [opcional] Y si los ataques cambian, el modelo se puede volver a entrenar con correos nuevos.
 
 ## Lámina 7 · Oportunidades, beneficios y riesgos · 5:00–6:00
 
@@ -56,7 +56,7 @@ Para estudiar el problema usamos un dataset público de Kaggle, Phishing Email D
 
 *(señala Beneficios)* ¿Beneficios? Menos fraudes en la bandeja, menos revisión manual y una decisión medible.
 
-*(señala Riesgos)* Y hay riesgos. Un fraude que se escapa es el error más grave. Muchas falsas alarmas quitan confianza. Los ataques cambian. Y hay un tema ético: el modelo lee correos que pueden tener datos personales. **Por eso hay que cuidar la privacidad y mantener la revisión humana.**
+*(señala Riesgos)* Y hay riesgos. Un fraude que se escapa es el error más grave. Muchas falsas alarmas quitan confianza. Los ataques cambian. [opcional] Hoy incluso se redactan con IA, sin errores ni urgencia. Y hay un tema ético: el modelo lee correos que pueden tener datos personales. **Por eso hay que cuidar la privacidad y mantener la revisión humana.**
 
 *(señala la frase de abajo)* Entonces, ¿qué problema queremos resolver? **Queremos detener el phishing antes de que alguien caiga**, clasificando cada correo por su texto. Y es importante porque basta una persona para poner en riesgo a la organización. Para eso necesitamos un modelo que entienda texto.
 
@@ -88,7 +88,7 @@ Ahora, el marco teórico. Partamos por la pieza básica: **la neurona artificial
 
 ## Lámina 13 · ¿Cómo aprende? · 10:35–11:50
 
-La red aprende en un ciclo de cuatro pasos. *(señala el paso 1)* Primero, la propagación hacia adelante: el correo pasa por las capas y sale una probabilidad, p. *(señala el paso 2)* Segundo, se calcula el error con la función de pérdida. Usamos la **entropía cruzada binaria**, que compara p con la etiqueta real. *(señala el ejemplo)* Si un correo es fraude y la red dice 0,9, la pérdida es 0,11. Si dice 0,1, sube a 2,30. **Castiga fuerte equivocarse con seguridad.** *(señala el paso 3)* Tercero, la retropropagación: calcula cuánto aportó cada peso al error, desde la salida hacia atrás. En la LSTM, también hacia atrás por las palabras. *(señala el paso 4)* Cuarto, el descenso del gradiente: mueve cada peso un poco en la dirección que reduce el error. Usamos Adam, que adapta el tamaño del paso de cada peso. *(señala el costado)* Esto se hace por lotes de 32 correos. Con 11.629 correos de entrenamiento, son 364 actualizaciones por época. Una época es una pasada completa por ellos, y el máximo es 6.
+La red aprende en un ciclo de cuatro pasos. *(señala el paso 1)* Primero, la propagación hacia adelante: el correo pasa por las capas y sale una probabilidad, p. *(señala el paso 2)* Segundo, se calcula el error con la función de pérdida. Usamos la **entropía cruzada binaria**, que compara p con la etiqueta real. Es la pérdida que corresponde a una salida sigmoide, porque mide el error de una probabilidad. *(señala el ejemplo)* Si un correo es fraude y la red dice 0,9, la pérdida es 0,11. Si dice 0,1, sube a 2,30. **Castiga fuerte equivocarse con seguridad.** *(señala el paso 3)* Tercero, la retropropagación: calcula cuánto aportó cada peso al error, desde la salida hacia atrás. En la LSTM, también hacia atrás por las palabras. *(señala el paso 4)* Cuarto, el descenso del gradiente. El gradiente dice cuánto cambia el error si muevo un poco cada peso, así que cada peso se mueve un poco en sentido contrario, para que el error baje. Usamos Adam, que adapta el tamaño del paso de cada peso. *(señala el costado)* Esto se hace por lotes de 32 correos. Con 11.629 correos de entrenamiento, son 364 actualizaciones por época. Una época es una pasada completa por ellos, y el máximo es 6.
 
 ## Lámina 14 · Sobreajuste y métricas · 11:50–13:00
 
@@ -98,7 +98,7 @@ La red aprende en un ciclo de cuatro pasos. *(señala el paso 1)* Primero, la pr
 
 ## Lámina 15 · Lo que entrega el modelo · 13:00–13:30
 
-*(señala la barra)* La salida es una probabilidad de fraude. Desde 0,5, el correo va a cuarentena; bajo 0,5, a la bandeja. **Ese umbral lo decide la organización**: si se baja, detecta más fraude, pero con más falsas alarmas. Entonces, **la LSTM es adecuada porque el correo es una secuencia**. Lo lee en orden, con memoria, y aprende reduciendo su error. Ahora, [Nombre estudiante 2] la va a implementar en vivo.
+*(señala la barra)* La salida es una probabilidad de fraude. Desde 0,5, el correo va a cuarentena; bajo 0,5, a la bandeja. **Ese umbral lo decide la organización**: si se baja, detecta más fraude, pero con más falsas alarmas. Entonces, **la LSTM es adecuada porque el correo es una secuencia**. Lo lee en orden, con memoria, y aprende reduciendo su error. Pero eso hay que comprobarlo con datos: por eso [Nombre estudiante 2] la va a implementar en vivo y la va a comparar con un modelo simple.
 
 ---
 
@@ -142,3 +142,5 @@ La red aprende en un ciclo de cuatro pasos. *(señala el paso 1)* Primero, la pr
 | **Total** | **1.743** | **67** | **13:57** | **13:30** |
 
 Conteo: solo el texto hablado, sin títulos ni acotaciones, incluidas las frases [opcional]; cada nombre entre corchetes cuenta como 2 palabras. Sin las frases [opcional] quedan 1.676 palabras, cerca de 13:25. Las cifras tardan más en decirse de lo que indica el conteo: el tiempo real lo da el ensayo con cronómetro.
+
+Nota: después de revisar el diálogo contra la rúbrica se agregaron las causas del problema (lámina 3), qué exigen las leyes (lámina 4), el gradiente y la relación entre sigmoide y pérdida (lámina 13) y el cierre de la lámina 15. Son unas 110 palabras más: el total queda cerca de 14:10 sin las frases [opcional]. Sigue bajo el máximo de 15:00.

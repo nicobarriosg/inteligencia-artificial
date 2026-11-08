@@ -280,7 +280,7 @@ La función `limpiar()` (paso 5) aplica, en este orden: minúsculas, quitar HTML
 
 **Qué hicimos:** `re.sub(r'(https?://|www\.)\S+', ' enlaceweb ', texto)`: todo lo que empieza con `http://`, `https://` o `www.`, hasta el siguiente espacio, se convierte en la palabra `enlaceweb`.
 
-**Por qué:** Importa que haya un enlace, no cuál es. Cada dirección es casi única: llenaría el vocabulario de palabras raras, y el filtro de solo letras la partiría en pedazos sin sentido. `enlaceweb` es una palabra inventada, que no existe en inglés, así que no se confunde con una palabra real (criterio técnico). El costo: el modelo no ve el dominio del enlace, que es parte de la explicación probable de por qué se le escapó el correo de soporte TI (interpretación, no medida).
+**Por qué:** Importa que haya un enlace, no cuál es. Cada dirección es casi única: llenaría el vocabulario de palabras raras, y el filtro de solo letras la partiría en pedazos sin sentido. `enlaceweb` es una palabra inventada, que no existe en inglés, así que no se confunde con una palabra real (criterio técnico). El costo: el modelo no ve el dominio del enlace. **Hallazgo medido:** después de limpiar, `enlaceweb` aparece en el 30,9% de los correos seguros y en el 10,7% de los fraudes. Una causa probable es que muchas URL del dataset vienen partidas con espacios ('http : / / ...') y la regla no las detecta. En este dataset, tener un enlace inclina hacia 'seguro'. Mejora: una regla que capture también esas URL.
 
 **Alternativas que no usamos:** Conservar el dominio de cada enlace como señal: es más información, pero exige otro tratamiento. Queda como mejora: "sumar el dominio real de los enlaces".
 
@@ -789,7 +789,7 @@ Código del paso 11: `modelo.fit(X_ent_num, y_ent, validation_data=(X_val_num, y
 
 **Qué hicimos:** Cuatro correos escritos para esta prueba, que no vienen del dataset: Banco (fraude con urgencia y amenaza de suspensión), Paquete (fraude con un cobro pequeño y un plazo), Soporte TI (fraude bien escrito, sin urgencia ni amenazas) y Coordinación (aviso académico legítimo). Resultado: Banco, FRAUDULENTO 99,1%; Paquete, FRAUDULENTO 97,8%; Soporte TI, SEGURO 4,1% (se le escapó); Coordinación, SEGURO 0,4%.
 
-**Por qué:** Cubren los casos que importan: dos fraudes evidentes, un fraude difícil que pone a prueba el límite del modelo y un correo legítimo que muestra que no marca todo como fraude. Soporte TI y Coordinación usan el contexto universitario, que también es parte del problema.
+**Por qué:** Cubren los casos que importan: dos fraudes evidentes, un fraude difícil que pone a prueba el límite del modelo y un correo legítimo, que debe salir seguro. Ojo: Coordinación comparte el vocabulario académico de Soporte TI, así que por sí solo no prueba mucho; un correo legítimo de otro tipo, como una recuperación de contraseña, sería una prueba más exigente. Soporte TI y Coordinación usan el contexto universitario, que también es parte del problema.
 
 **Alternativas que no usamos:** Correos del dataset: esos ya los mide la prueba. Correos reales: tendrían datos personales y enlaces reales.
 
@@ -837,7 +837,7 @@ Código del paso 11: `modelo.fit(X_ent_num, y_ent, validation_data=(X_val_num, y
 
 **Qué hicimos:** El correo de soporte TI se dejó en la prueba aunque el modelo lo clasifica como seguro.
 
-**Por qué:** Muestra el límite real del modelo. Explicación probable (interpretación, no medida): el modelo se apoya en el lenguaje de presión (urgencia, amenazas, cobros), y este correo no lo tiene; además no ve el dominio sospechoso, porque el enlace se convierte en `enlaceweb`, la dirección del remitente se borra al limpiar y el modelo no analiza el remitente. De aquí sale la mejora concreta: analizar el remitente y el dominio real de los enlaces.
+**Por qué:** Muestra el límite real del modelo. Explicación probable: el vocabulario académico. En los datos limpios, 'university' aparece en el 14,7% de los correos seguros y en el 0,9% de los fraudes, 'linguistics' en el 10,1% contra 0% y 'conference' en el 8,8% contra 0,5%: muchos correos seguros vienen de listas académicas, así que ese vocabulario empuja hacia 'seguro'. Además, el correo no tiene lenguaje de presión y el modelo no ve el remitente ni el dominio del enlace. De aquí sale la mejora concreta: analizar el remitente y el dominio real de los enlaces.
 
 **Alternativas que no usamos:** Cambiarlo por un correo que el modelo acierte: la demostración se vería mejor, pero sería engañosa.
 
@@ -997,7 +997,7 @@ Lectura: los dos modelos se equivocan en la misma cantidad de correos. La LSTM d
 
 ### Qué ofrece la LSTM en principio
 
-- **Orden y contexto.** "We will never ask you to confirm your password" (un aviso legítimo de seguridad) y "please confirm your password" (un fraude) comparten las palabras clave; lo que cambia el sentido es el orden y la negación. Un modelo que solo ve qué palabras aparecen lo tiene más difícil (criterio técnico; no lo medimos).
+- **Orden y contexto.** "We will never ask you to confirm your password" (un aviso legítimo de seguridad) y "please confirm your password" (un fraude) comparten las palabras clave; lo que cambia el sentido es el orden y la negación. Un modelo que solo ve qué palabras aparecen lo tiene más difícil (criterio técnico). Ojo: nuestra LSTM tampoco lo aprovecha. Con el modelo del ensayo, la frase legítima "We will never ask you to confirm your password." sale con 81% de probabilidad de fraude. Es una capacidad teórica, no algo que nuestro modelo demuestre.
 - **Fraudes bien escritos.** El correo de soporte TI se parece en vocabulario a un correo legítimo. Si algo delata a ese tipo de fraude, está más en cómo se combinan las frases que en palabras sueltas, y ahí el orden debería pesar más. Nuestra LSTM tampoco lo detectó, así que esto queda como hipótesis.
 
 ### Qué experimento lo comprobaría (no lo hicimos)

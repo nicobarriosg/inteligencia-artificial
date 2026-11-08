@@ -34,7 +34,8 @@ Empezar presentándose: nombre y "voy a presentar el problema y el modelo".
 ### 4. Consecuencias si no se hace nada
 - Basta con que **una** persona caiga para que se comprometa una cuenta, y desde ahí se puede robar información o atacar a otros.
 - Pérdidas de dinero (pagos falsos), filtración de datos, horas de TI dedicadas a revisar y a contener incidentes.
-- Obligaciones legales: la Ley 21.663 (marco de ciberseguridad) y la Ley 21.719 (protección de datos personales) aumentan la responsabilidad de las organizaciones ante incidentes y filtraciones.
+- Obligaciones legales: la Ley 21.663 (marco de ciberseguridad) obliga a las instituciones que regula a reportar sus incidentes a la ANCI, y la Ley 21.719 exige proteger los datos personales.
+- Causas: enviar miles de correos casi no cuesta y basta con que caiga una persona; el correo permite imitar remitentes y disfrazar enlaces.
 - Revisar a mano no escala: el volumen de correos crece y los ataques cambian.
 
 ### 5. Datos para estudiar el problema
@@ -44,7 +45,7 @@ Empezar presentándose: nombre y "voy a presentar el problema y el modelo".
 
 ### 6. Por qué la IA aporta valor
 - Las reglas fijas (listas de palabras, filtros por remitente) se esquivan fácil: el atacante cambia una palabra.
-- Un modelo aprende patrones a partir de miles de ejemplos: urgencia, amenazas, pedidos de clave, enlaces.
+- Un modelo aprende patrones a partir de miles de ejemplos: urgencia, amenazas, pedidos de clave.
 - Entrega una probabilidad, no solo un sí o un no, y eso permite decidir cuánto riesgo aceptar.
 
 ### 7. Oportunidades de mejora o de negocio

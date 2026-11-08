@@ -194,6 +194,7 @@ print("\nEjemplo:", datos['limpio'].iloc[0][:150])
 **Por qué así** (para responder preguntas)
 
 - `re.sub` busca un patrón y lo reemplaza. `\b` significa borde de palabra: así no se borra 'ect' dentro de 'project'.
+- Hallazgo para la defensa: después de limpiar, `enlaceweb` aparece en el 30,9% de los correos seguros y en el 10,7% de los fraudes. Una causa probable: muchas URL del dataset vienen partidas con espacios ('http : / / ...') y la regla no las detecta. En este dataset, tener un enlace inclina hacia 'seguro'. Mejora: una regla que capture también esas URL.
 - Una limitación: el dataset mezcla phishing con spam común, así que hablo de correos fraudulentos y spam.
 
 **Resultado esperado**
@@ -477,14 +478,14 @@ for real, nombre, correo in correos:
 
 - Escribo la función en vivo y pego los correos: lo que importa aquí es la función, no tipear los textos.
 - `limpiar` y `vectorizador` son los mismos del entrenamiento: el correo nuevo pasa por el mismo proceso.
-- Los correos 1 y 2 usan urgencia, amenazas o un cobro. El 4 es un aviso académico normal: muestra que el modelo no marca todo como fraude.
+- Los correos 1 y 2 usan urgencia, amenazas o un cobro. El 4 es un aviso académico normal y debe salir seguro. Ojo: comparte el vocabulario académico del correo 3, así que por sí solo no prueba mucho.
 - **El correo 3 es el importante:** es un fraude bien escrito, sin amenazas. Si el modelo lo deja pasar, lo digo: ese es su límite real.
 - Muestro la probabilidad, no solo la etiqueta.
 
 **Por qué así** (para responder preguntas)
 
 - Esta es la prueba con datos que pide la rúbrica. Los correos están en inglés porque el dataset está en inglés.
-- Probable explicación del correo 3 (interpretación, no medida): el modelo se apoya en el lenguaje de presión, y no ve el dominio sospechoso porque los enlaces se reemplazan por `enlaceweb` y no analiza el remitente.
+- Probable explicación del correo 3: el vocabulario académico. En los datos limpios, 'university' aparece en el 14,7% de los correos seguros y en el 0,9% de los fraudes, y 'linguistics' en el 10,1% contra 0%: muchos correos seguros vienen de listas académicas. Además, el modelo no analiza el remitente ni el dominio real del enlace.
 - La mejora concreta que se desprende de esto es analizar el remitente y el dominio real de los enlaces.
 
 **Resultado esperado**

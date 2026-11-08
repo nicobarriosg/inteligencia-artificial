@@ -339,7 +339,7 @@ plt.show()
 Este código solo dibuja los gráficos, así que lo pego.
 
 **Cuando sale el resultado:**
-A la izquierda está la pérdida; a la derecha, la exactitud. La pérdida de entrenamiento tiende a bajar, aunque no en todas las épocas. **La de validación baja al principio y después sube: desde ahí la red empieza a memorizar.** Por eso la parada temprana se quedó con la mejor época.
+A la izquierda está la pérdida; a la derecha, la exactitud. La pérdida de entrenamiento tiende a bajar, aunque no en todas las épocas. Miro la de validación: la más baja fue en la época *(di cuál)*, y la parada temprana se quedó con esos pesos. **Si la validación sube mientras el entrenamiento baja, la red está memorizando: eso es sobreajuste.**
 *(si la curva de validación no sube)* Aquí la validación no se separó del entrenamiento, así que no hubo un sobreajuste claro.
 
 ## Paso 13 · Evaluar y comparar · 10:30–11:35
@@ -429,8 +429,8 @@ for real, nombre, correo in correos:
 Recorro los cuatro y muestro la probabilidad, no solo la etiqueta.
 
 **Cuando sale el resultado:**
-El del banco sale fraudulento, con 99%: urgencia, amenaza y enlace. El del paquete también, con 98%. El aviso académico sale seguro: **el modelo no marca todo como fraude.**
-*(señala la línea de soporte TI)* Y este es el importante. **Es un fraude bien escrito, sin amenazas ni urgencia, y el modelo lo deja pasar**, con 4%. Ese es su límite real. Probablemente se apoya en el lenguaje de presión, y no ve el dominio sospechoso porque cambiamos los enlaces por una palabra y no analizamos el remitente.
+El del banco sale fraudulento, con 99%: urgencia, amenaza y enlace. El del paquete también, con 98%. El aviso académico sale seguro, como corresponde.
+*(señala la línea de soporte TI)* Y este es el importante. **Es un fraude bien escrito, sin amenazas ni urgencia, y el modelo lo deja pasar**, con 4%. Ese es su límite real. **Probablemente se debe al vocabulario académico**: en este dataset, palabras como university o students aparecen casi solo en correos seguros. Además, el modelo no analiza el remitente ni el dominio real del enlace.
 
 ## Paso 15 · Interpretar el resultado · 12:55–13:25
 
@@ -486,6 +486,6 @@ Entonces, ¿resuelve el problema? **Parcialmente.** Sirve como filtro de apoyo c
 - **Paso 11:** parada temprana · lotes de 32 · retropropagación · loss y val_loss
 - **Paso 12:** validación sube = memoriza
 - **Paso 13:** 0,967 · diagonal · empate con la regresión
-- **Paso 14:** misma limpieza · banco y paquete fraude · aviso seguro · soporte TI se escapa
+- **Paso 14:** misma limpieza · banco y paquete fraude · aviso seguro · soporte TI se escapa · vocabulario académico
 - **Paso 15:** 1.218 de 1.289 · 41 falsas alarmas · cuarentena, no borrar
 - **Cierre:** parcialmente · empate honesto · limitaciones · mejoras
