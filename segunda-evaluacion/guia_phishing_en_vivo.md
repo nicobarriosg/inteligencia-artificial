@@ -6,8 +6,8 @@ El enunciado no permite solo ejecutar un notebook terminado. Esta guía sirve pa
 
 ## Antes de grabar
 
-- [ ] Abrir VS Code con las extensiones Python y Jupyter, crear un notebook **nuevo y vacío** y elegir el kernel del entorno que tiene TensorFlow (detalle en `dialogo_estudiante_2.md`, sección *Antes de grabar*).
-- [ ] Ensayar completo y cronometrar en el mismo computador con el que se va a grabar. En el ensayo local, en CPU, el entrenamiento tomó poco más de 1 minuto.
+- [ ] Subir `phishing_en_vivo.ipynb` a Colab (*Archivo → Subir notebook*) y activar la GPU (*Entorno de ejecución → Cambiar tipo de entorno de ejecución → T4 GPU*). Detalle en `dialogo_estudiante_2.md`, sección *Antes de grabar*.
+- [ ] Ensayar completo y cronometrar en una copia del notebook. **Todavía no se ha probado en Colab**, solo en un computador local.
 - [ ] Tener esta guía a la vista, pero explicar con palabras propias: la rúbrica castiga la lectura.
 - [ ] Aumentar el zoom del navegador para que el código se lea en el video.
 - [ ] Al terminar, ejecutar el paso 17 y guardar `modelo_phishing.keras` para la defensa.
@@ -61,7 +61,7 @@ print("GPU disponible:", tf.config.list_physical_devices('GPU'))
 **Qué explicar**
 
 - Me identifico: nombre e integrante 3, a cargo de la implementación.
-- Trabajo en VS Code con un notebook de Jupyter. `%pip` instala en el mismo entorno del notebook. Si hay GPU, TensorFlow la usa para acelerar la LSTM.
+- Trabajo en Google Colab con GPU: la LSTM repite muchos cálculos por cada palabra y la GPU los acelera. Colab ya trae TensorFlow; con `%pip` me aseguro de tener `kagglehub`.
 - `kagglehub` me permite descargar el dataset directamente desde Kaggle.
 
 **Por qué así** (para responder preguntas)
@@ -588,11 +588,11 @@ except ImportError:
 
 | Problema | Qué hacer |
 |---|---|
-| Falla la descarga | Volver a ejecutar. Si persiste, bajar el CSV desde la página de Kaggle, dejarlo en la carpeta del notebook y leerlo con `pd.read_csv('Phishing_Email.csv')`. |
+| Falla la descarga | Volver a ejecutar. Si persiste, bajar el CSV desde la página de Kaggle, subirlo al panel de archivos de Colab y leerlo con `pd.read_csv('Phishing_Email.csv')`. |
 | `NameError` | Se saltó una celda: ejecutar las anteriores. |
 | Error de tipeo | Leer el mensaje en voz alta y corregir. |
 | Resultados distintos a los de esta guía | Es esperable: interpretar los números que salieron. |
 
 ## Modo defensa
 
-Ejecutar los pasos 1, 2, 3, 5 y 6, con `modelo_phishing.keras` en la carpeta del notebook, y ejecutar la celda **Modo defensa**.
+Ejecutar los pasos 1, 2, 3, 5 y 6, subir `modelo_phishing.keras` al panel de archivos de Colab y ejecutar la celda **Modo defensa**.

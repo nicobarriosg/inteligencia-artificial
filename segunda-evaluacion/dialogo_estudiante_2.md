@@ -6,19 +6,18 @@ Lo que dice [Nombre estudiante 2] mientras escribe el código, bloque por bloque
 
 - Cada paso está dividido en bloques chicos de código. Escribes el bloque mientras dices el texto de **Mientras escribes**. Después ejecutas y dices el texto de **Cuando sale el resultado**.
 - Lo que va en cursiva y entre paréntesis es una acción, no se dice.
-- **Los números pueden cambiar un poco según el computador.** Di los que salgan en pantalla, no los de esta guía.
+- **Los números pueden cambiar un poco en Colab** (otra versión de TensorFlow y GPU). Di los que salgan en pantalla, no los de esta guía.
 - Se puede pegar el paso 12 (gráficos) y los textos de los correos del paso 14. Todo lo demás se escribe.
-- Tiempo máximo: 15:00. Los relojes de cada paso suman 14:15 y dejan 45 segundos para errores de tipeo. Ensaya con cronómetro en VS Code, en el mismo computador con el que vas a grabar: escribir en vivo siempre toma más de lo que parece.
+- Tiempo máximo: 15:00. Los relojes de cada paso suman 14:15 y dejan 45 segundos para errores de tipeo. Ensaya completo en Colab con cronómetro: escribir en vivo siempre toma más de lo que parece.
 - No leas: quédate con las ideas en **negrita** y dilo con tus palabras.
 
-## Antes de grabar (VS Code)
+## Antes de grabar (Google Colab)
 
-- [ ] VS Code con las extensiones **Python** y **Jupyter** de Microsoft.
-- [ ] Python con las bibliotecas instaladas. En una terminal, idealmente dentro de un entorno virtual: `pip install tensorflow scikit-learn pandas matplotlib kagglehub ipykernel`. En el computador donde se ensayó ya existe un entorno con todo: `~/.cache/ia-tfenv` (TensorFlow 2.22).
-- [ ] Abrir `phishing_en_vivo.ipynb`, que trae solo los títulos de cada paso y una celda de código vacía debajo de cada uno. Elegir el kernel con **Seleccionar kernel**, arriba a la derecha: el entorno que tiene TensorFlow. Para el entorno del ensayo: *Entornos de Python* → `~/.cache/ia-tfenv/bin/python`.
-- [ ] Ejecutar una vez la descarga del paso 3 antes de grabar, en otro notebook: kagglehub guarda el dataset en caché y en el video carga al instante.
-- [ ] Probablemente no hay GPU: la red entrena en el procesador. En el ensayo en CPU tomó poco más de un minuto (unos 17 segundos por época).
-- [ ] Subir el zoom (Ctrl y +) y usar un tema que se lea bien en video. Cerrar notificaciones y programas pesados.
+- [ ] Entrar a colab.research.google.com con una cuenta de Google y subir `phishing_en_vivo.ipynb` (*Archivo → Subir notebook*). Trae solo los títulos de cada paso y una celda vacía debajo de cada uno.
+- [ ] Activar la GPU: *Entorno de ejecución → Cambiar tipo de entorno de ejecución → T4 GPU → Guardar*. Si Colab no asigna GPU, el código funciona igual en CPU (en el ensayo, poco más de un minuto de entrenamiento).
+- [ ] Ensayar completo y cronometrar en una **copia** del notebook (*Archivo → Guardar una copia en Drive*), para que el notebook del video siga vacío. El código se ensayó en un computador local y todavía no en Colab: este ensayo es obligatorio.
+- [ ] Antes de grabar: *Entorno de ejecución → Desconectar y borrar el entorno de ejecución*, para partir de cero, y volver a activar la GPU si hace falta.
+- [ ] Subir el zoom del navegador (Ctrl y +) para que el código se lea en el video. Cerrar notificaciones y otras pestañas.
 - [ ] Tener el notebook de respaldo `deteccion_phishing_lstm.ipynb` abierto en otra pestaña.
 
 ---
@@ -34,11 +33,11 @@ print("GPU disponible:", tf.config.list_physical_devices('GPU'))
 ```
 
 **Mientras escribes:**
-Hola, soy [Nombre estudiante 2] y voy a construir la solución en vivo. **Estoy en VS Code, con un notebook de Jupyter vacío** y un entorno de Python que ya tiene TensorFlow. Con %pip instalo kagglehub, que descarga el dataset directo desde Kaggle; el porcentaje hace que se instale en el mismo entorno del notebook. Después importo TensorFlow y reviso la versión y si hay GPU.
+Hola, soy [Nombre estudiante 2] y voy a construir la solución en vivo. **Estoy en Google Colab, con la GPU activada**: la GPU acelera los cálculos de la red, que se repiten por cada palabra del correo. Colab ya trae TensorFlow, scikit-learn y pandas. Con %pip me aseguro de tener kagglehub, que descarga el dataset directo desde Kaggle. Después importo TensorFlow y reviso la versión y si hay GPU.
 
 **Cuando sale el resultado:**
-Aquí está la versión de TensorFlow.
-*(si la lista de GPU sale vacía)* No hay GPU, así que la red entrena en el procesador. Funciona igual, solo demora un poco más: en el ensayo, poco más de un minuto.
+Aquí está la versión de TensorFlow y la GPU que asignó Colab.
+*(si la lista de GPU sale vacía)* Colab no asignó GPU, así que la red entrena en el procesador. Funciona igual, solo demora un poco más: en el ensayo, poco más de un minuto.
 
 ## Paso 2 · Importar las bibliotecas · 0:35–1:05
 
@@ -316,7 +315,7 @@ historial = modelo.fit(
 **Mientras escribes:**
 Entreno con los correos de entrenamiento y valido con los de validación. Máximo 6 épocas, en lotes de 32 correos.
 
-**Mientras entrena** *(en CPU dura cerca de un minuto; aprovecha la espera)*:
+**Mientras entrena** *(con GPU puede tardar solo unos segundos por época; si termina antes, completa la idea mirando las líneas de cada época)*:
 Mientras entrena, explico qué pasa. La red toma 32 correos, calcula su probabilidad y la compara con la etiqueta real usando la pérdida. Luego **la retropropagación calcula cuánto aportó cada peso al error, y Adam ajusta los pesos un poco**. Eso se repite 364 veces por época. *(señala una línea)* loss es la pérdida en entrenamiento. val_loss es la pérdida en correos que no se usan para ajustar pesos. **Si loss baja y val_loss sube, la red está memorizando: eso es sobreajuste**, y ahí actúa la parada temprana.
 
 **Cuando termina:**
@@ -456,7 +455,7 @@ Entonces, ¿resuelve el problema? **Parcialmente.** Sirve como filtro de apoyo c
 
 ## Fuera de cámara
 
-**Paso 17: guardar el modelo para la defensa.** Ejecútalo apenas termines de grabar: `modelo_phishing.keras` queda en la misma carpeta del notebook (el código está en `guia_phishing_en_vivo.md`). Guárdalo para la defensa. Si te preguntan: el archivo junta el vectorizador con la red, así que en la defensa recibe texto directamente, sin volver a entrenar.
+**Paso 17: guardar el modelo para la defensa.** Ejecútalo apenas termines de grabar: descarga `modelo_phishing.keras` a tu computador (si el navegador pregunta, permite la descarga). Sin ese archivo, en la defensa habría que volver a entrenar. El código está en `guia_phishing_en_vivo.md`. Si te preguntan: el archivo junta el vectorizador con la red, así que en la defensa recibe texto directamente, sin volver a entrenar.
 
 **Paso 16 (opcional), el umbral.** Si sobra tiempo o lo preguntan en la defensa: con un umbral de 0,3 detecta más fraude, pero con más falsas alarmas; con 0,9 casi no hay falsas alarmas, pero se escapan más fraudes. **El umbral lo decide la organización según qué error le cuesta más.**
 
@@ -465,14 +464,15 @@ Entonces, ¿resuelve el problema? **Parcialmente.** Sirve como filtro de apoyo c
 | Problema | Qué decir y hacer |
 |---|---|
 | Error de tipeo | "Me equivoqué en esta línea, la corrijo." Lee el mensaje de error en voz alta y corrige: también demuestra que entiendes el código. |
-| `NameError` | "Me salté una celda." Ejecuta las celdas anteriores, o usa **Ejecutar todo** en la barra del notebook. |
-| Falla la descarga | Vuelve a ejecutar. Si sigue fallando, descarga el CSV desde la página de Kaggle, déjalo en la carpeta del notebook y léelo con `pd.read_csv('Phishing_Email.csv')`. |
-| El kernel se cae o se queda pegado | "Reinicio el kernel." Usa **Reiniciar** en la barra del notebook y después **Ejecutar todo**. |
+| `NameError` | "Me salté una celda." *Entorno de ejecución → Ejecutar anteriores* (Ctrl + F8). |
+| Falla la descarga | Vuelve a ejecutar. Si sigue fallando, descarga el CSV desde la página de Kaggle, súbelo al panel de archivos de Colab (ícono de carpeta, a la izquierda) y léelo con `pd.read_csv('Phishing_Email.csv')`. |
+| Colab se desconecta o se queda pegado | "Se reinició el entorno." *Entorno de ejecución → Reiniciar sesión* y después *Ejecutar anteriores*. |
+| Colab no asigna GPU | "Hoy no tengo GPU, así que entreno en el procesador." Sigue igual: tarda cerca de un minuto. |
 | Números distintos a esta guía | "Los números varían un poco entre ejecuciones." Interpreta los que salieron. |
 
 ## Si me quedo en blanco
 
-- **Paso 1:** me presento · VS Code · %pip kagglehub · versión y GPU
+- **Paso 1:** me presento · Colab con GPU · %pip kagglehub · versión y GPU
 - **Paso 2:** para qué sirve cada biblioteca · semilla
 - **Paso 3:** dataset de Kaggle · texto y tipo · supervisado
 - **Paso 4:** duplicados inflan · 6 de cada 10 seguros · enron es un atajo
