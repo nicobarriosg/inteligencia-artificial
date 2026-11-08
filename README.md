@@ -16,6 +16,7 @@ Un modelo de Deep Learning lee el texto de un correo y estima la probabilidad de
 | [`presentacion_estudiante_1.pptx`](segunda-evaluacion/presentacion_estudiante_1.pptx) | La misma presentación, editable en PowerPoint o Google Slides |
 | [`dialogo_estudiante_1.md`](segunda-evaluacion/dialogo_estudiante_1.md) | Diálogo del estudiante 1, lámina por lámina |
 | [`guia_estudiante_1_contexto_y_modelo.md`](segunda-evaluacion/guia_estudiante_1_contexto_y_modelo.md) | Ideas clave del estudiante 1 y preguntas probables de la defensa |
+| [`dialogo_estudiante_2.md`](segunda-evaluacion/dialogo_estudiante_2.md) | Diálogo del estudiante 2: qué decir mientras escribe cada bloque de código |
 | [`guia_phishing_en_vivo.md`](segunda-evaluacion/guia_phishing_en_vivo.md) | Guía de programación en vivo del estudiante 2 |
 | [`decisiones_del_proyecto.md`](segunda-evaluacion/decisiones_del_proyecto.md) | Por qué tomamos cada decisión del proyecto |
 
