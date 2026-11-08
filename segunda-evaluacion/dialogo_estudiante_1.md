@@ -66,7 +66,7 @@ Para estudiar el problema usamos un dataset público de Kaggle, Phishing Email D
 
 ¿Por qué esta red? Porque **un correo es una secuencia, y el orden de las palabras importa**. *(señala la frase)* Por ejemplo, "click the link below to confirm your password". La LSTM la lee palabra por palabra, con memoria. *(señala la bolsa)* Un modelo de bolsa de palabras solo mira qué palabras aparecen. Si las desordeno, para él es el mismo correo.
 
-Es el mismo esquema del ejemplo de noticias falsas visto en clases. Además, [Nombre estudiante 2] va a entrenar una regresión logística, un modelo simple de bolsa de palabras. **Así comprobamos si la LSTM realmente aporta.**
+Se basa en el ejemplo de noticias falsas visto en clases, pero con una sola LSTM en vez de dos. Además, [Nombre estudiante 2] va a entrenar una regresión logística, un modelo simple de bolsa de palabras. **Así comprobamos si la LSTM realmente aporta.**
 
 ## Lámina 9 · Del texto a números · 7:00–7:50
 

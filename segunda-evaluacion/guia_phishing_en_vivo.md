@@ -309,7 +309,7 @@ modelo.summary()
 **Por qué así** (para responder preguntas)
 
 - Si aparece un aviso sobre `mask`, indica que las capas siguientes no reciben la máscara. La LSTM la usa igual (lo comprobé en mi ensayo: el resultado es igual a leer solo las palabras reales, sin relleno).
-- Es la misma combinación del ejemplo de noticias falsas del profesor: Embedding, LSTM, Dropout y Dense con sigmoide.
+- Usa los componentes del ejemplo de noticias falsas del curso (Embedding de 64, LSTM, Dropout de 0,5 y Dense con sigmoide), pero con una sola LSTM en vez de dos apiladas: es más simple y más rápida de entrenar en vivo. No probamos la versión con dos LSTM.
 
 **Resultado esperado**
 

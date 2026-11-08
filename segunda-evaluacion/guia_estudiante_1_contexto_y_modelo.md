@@ -78,7 +78,7 @@ Pregunta que debe quedar respondida: **¿por qué este modelo es adecuado y cóm
 ### 2. Por qué es adecuado
 - Un correo es una **secuencia** de palabras, y el orden importa: "click the link below to confirm your password" significa algo distinto que las mismas palabras desordenadas.
 - Una red normal recibe todo de una vez y no ve el orden. Una LSTM lee palabra por palabra y guarda una memoria de lo que ya leyó.
-- Es la misma combinación del ejemplo de noticias falsas visto en clases: Embedding, LSTM, Dropout y una neurona de salida.
+- Se basa en el ejemplo de noticias falsas visto en clases (Embedding de 64, LSTM, Dropout de 0,5 y salida sigmoide), pero con una sola LSTM en vez de dos apiladas: es más simple y entrena más rápido en vivo.
 - **Ser honesto con la comparación** (el estudiante 2 lo va a mostrar): también se mide una regresión logística, un modelo simple. En este dataset rinden casi igual (exactitud 0,967 los dos). Lo que se justifica es probar la LSTM porque considera el orden; **no** decir que es mejor que el modelo clásico. La ventaja del orden debería verse con fraudes mejor escritos, que son justamente los que hoy se escapan.
 
 ### 3. Cómo entran los datos

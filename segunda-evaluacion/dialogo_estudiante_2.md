@@ -339,7 +339,7 @@ plt.show()
 Este código solo dibuja los gráficos, así que lo pego.
 
 **Cuando sale el resultado:**
-A la izquierda está la pérdida; a la derecha, la exactitud. La pérdida de entrenamiento baja en cada época. **La de validación baja al principio y después sube: desde ahí la red empieza a memorizar.** Por eso la parada temprana se quedó con la mejor época.
+A la izquierda está la pérdida; a la derecha, la exactitud. La pérdida de entrenamiento tiende a bajar, aunque no en todas las épocas. **La de validación baja al principio y después sube: desde ahí la red empieza a memorizar.** Por eso la parada temprana se quedó con la mejor época.
 *(si la curva de validación no sube)* Aquí la validación no se separó del entrenamiento, así que no hubo un sobreajuste claro.
 
 ## Paso 13 · Evaluar y comparar · 10:30–11:35

@@ -34,6 +34,7 @@ Proyecto: detección de correos fraudulentos (phishing) con una red LSTM en Kera
 22. Cifras para tener a mano
 23. Limitaciones que reconocemos
 24. Mejoras
+25. Comparación con el material del profesor
 
 ---
 
@@ -509,12 +510,12 @@ Código del paso 9: `keras.Sequential([keras.Input(shape=(LARGO,)), layers.Embed
 
 **Qué hicimos:** Una red recurrente LSTM (Long Short-Term Memory) con un Embedding antes, para clasificación binaria de texto. La entrada (`Input(shape=(200,))`) son los 200 números de cada correo.
 
-**Por qué:** Un correo es una secuencia de palabras, y el orden puede importar: "click the link below to confirm your password" no es lo mismo que esas palabras desordenadas. Una LSTM lee palabra por palabra y guarda una memoria de lo leído. Con sus compuertas puede conservar información durante muchos pasos, algo que una RNN simple pierde, porque en ella el gradiente se desvanece en secuencias largas y olvida las palabras lejanas. Es la misma combinación del ejemplo de noticias falsas del profesor (Embedding, LSTM, Dropout y Dense con sigmoide), lo que da coherencia con el curso. Ojo: la elegimos porque puede considerar el orden, no porque haya rendido más (ver la sección 21).
+**Por qué:** Un correo es una secuencia de palabras, y el orden puede importar: "click the link below to confirm your password" no es lo mismo que esas palabras desordenadas. Una LSTM lee palabra por palabra y guarda una memoria de lo leído. Con sus compuertas puede conservar información durante muchos pasos, algo que una RNN simple pierde, porque en ella el gradiente se desvanece en secuencias largas y olvida las palabras lejanas. Se basa en el ejemplo de noticias falsas del profesor, que usa los mismos componentes (Embedding de 64, LSTM, Dropout de 0,5 y Dense con sigmoide) pero con dos LSTM apiladas; nosotros usamos una (ver la sección 25). Ojo: la elegimos porque puede considerar el orden, no porque haya rendido más (ver la sección 21).
 
 **Alternativas que no usamos:**
 - RNN simple: olvida las palabras lejanas, por el gradiente que se desvanece.
 - GRU: parecida a la LSTM, con menos parámetros. Nos quedamos con la LSTM del ejemplo del curso; la GRU no la probamos.
-- LSTM bidireccional o varias LSTM apiladas: más parámetros y más tiempo de entrenamiento en una demostración en vivo de 15 minutos. Con el empate medido, no hay evidencia de que haga falta más capacidad (inferencia).
+- LSTM bidireccional o varias LSTM apiladas (el ejemplo de noticias falsas apila dos): más parámetros y más tiempo de entrenamiento en una demostración en vivo de 15 minutos. Con el empate medido, no hay evidencia de que haga falta más capacidad (inferencia).
 - Red convolucional 1D sobre texto: también es una opción para secuencias; no la probamos.
 - Transformers o BERT preentrenado: mucho más grandes, más pesados de descargar y de ajustar en vivo, y su teoría no cabe en la explicación de 15 minutos.
 
@@ -1078,3 +1079,26 @@ Las cuatro primeras son las de la conclusión del notebook; las dos últimas sal
 - Enviar lo sospechoso a cuarentena, con revisión humana, y cuidar la privacidad del contenido de los correos (Ley 21.719).
 - Probar los dos modelos con correos donde el orden importe y con más fraudes bien escritos, para comprobar si la LSTM aporta.
 - Repetir el entrenamiento con varias semillas para medir cuánto varían los resultados.
+
+---
+
+## 25. Comparación con el material del profesor
+
+Revisamos el ejemplo de noticias falsas con LSTM (`aplicacion_IA_NoticiasFalsas.pdf`) y el de regresión logística para spam (`App_regresion_logistica.docx`). El proyecto sigue el mismo camino del curso: texto → números → Embedding → LSTM → Dropout → Dense con sigmoide, compilado con adam y binary_crossentropy, y una prueba con un dato nuevo. Estas son las diferencias y qué responder:
+
+| Aspecto | Ejemplo del profesor | Nuestro proyecto | Si preguntan |
+|---|---|---|---|
+| Texto a números | `Tokenizer(num_words=5000)` + `pad_sequences(maxlen=500)` | `TextVectorization(max_tokens=20000, output_sequence_length=200)` | Hace lo mismo en una sola capa, que además queda guardada dentro del modelo para la defensa. |
+| Vocabulario | 5.000 palabras | 20.000 | Valor habitual, no ajustado: incluye más palabras distintivas a cambio de más parámetros. No probamos 5.000. |
+| Largo | 500 palabras; `pad_sequences` por defecto rellena y corta al inicio, así que lee las últimas 500 | 200; rellena y corta al final, así que lee las primeras 200 | 200 por la mediana de 160 palabras y por el tiempo de entrenamiento en vivo. La máscara hace que la LSTM ignore el relleno. |
+| Capas LSTM | Dos apiladas: `LSTM(64, return_sequences=True)`, `Dropout(0.5)`, `LSTM(32)` | Una: `LSTM(64)`, `Dropout(0.5)` | Es más simple y entrena más rápido en vivo. Con el empate medido, no hay evidencia de que haga falta más capacidad. No probamos dos capas. |
+| Validación | Valida con los mismos datos de prueba | Validación separada (2.053 correos) y prueba solo al final | La parada temprana decide con la validación; si validáramos con la prueba, la prueba dejaría de ser independiente. |
+| Épocas y lote | 5 épocas fijas, lote de 64 | Máximo 6 con parada temprana, lote de 32 | El orden de magnitud es el mismo; la parada temprana elige la mejor época con datos. |
+| Etiquetas | `LabelEncoder` | Comparación directa (`== 'Phishing Email'`) | LabelEncoder ordena alfabéticamente y dejaría "Phishing Email" = 0; así aseguramos que 1 sea fraude. |
+| Evaluación | `model.evaluate` (exactitud) y una noticia nueva | Reporte de clasificación, AUC, matriz de confusión, comparación con un modelo simple y 4 correos nuevos | Va más allá del ejemplo, en la línea de "accuracy no siempre es suficiente" del material de regresión logística. |
+
+**Ojo con una palabra.** En el ejemplo, el profesor imprime la exactitud (accuracy) como "Precisión del modelo", y el material de modelos de machine learning guarda la exactitud en una variable llamada `precision`. Nosotros usamos exactitud para el porcentaje de aciertos y precisión para la métrica de la clase fraude. Si el profesor dice "precisión" refiriéndose a los aciertos, aclarar: "eso es la exactitud, 0,967; la precisión de la clase fraude también salió 0,967".
+
+**Los casos A y B del material de regresión logística.** El material pregunta qué error molesta más: que un spam llegue a la bandeja (caso A) o que un correo legítimo se vaya a spam (caso B). En nuestro proyecto, el caso A es el falso negativo, el error caro, y el caso B es el falso positivo.
+
+**Si preguntan por Isolation Forest** (el material lo asocia a la detección de fraude): es no supervisado y sirve cuando no hay etiquetas o el fraude es muy raro. Aquí tenemos etiquetas y el fraude es cerca del 38% de los correos, así que corresponde un modelo supervisado.
