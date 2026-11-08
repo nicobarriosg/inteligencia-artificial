@@ -5,6 +5,7 @@ Lo que dice [Nombre estudiante 2] mientras escribe el código, bloque por bloque
 ## Cómo usar este diálogo
 
 - Cada paso está dividido en bloques chicos de código. Escribes el bloque mientras dices el texto de **Mientras escribes**. Después ejecutas y dices el texto de **Cuando sale el resultado**.
+- **Todos los bloques de un paso van en la misma celda.** La división es solo para saber qué decir mientras escribes cada parte. Escribe el primer bloque, sigue con el siguiente en la misma celda y ejecuta una sola vez al final del paso (Shift + Enter). Es una celda por paso, como en `phishing_en_vivo.ipynb`.
 - Lo que va en cursiva y entre paréntesis es una acción, no se dice.
 - **Los números pueden cambiar un poco en Colab** (otra versión de TensorFlow y GPU). Di los que salgan en pantalla, no los de esta guía.
 - Se puede pegar el paso 12 (gráficos) y los textos de los correos del paso 14. Todo lo demás se escribe.
