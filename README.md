@@ -16,6 +16,7 @@ Un modelo de Deep Learning lee el texto de un correo y estima la probabilidad de
 | [`presentacion_estudiante_1.pptx`](segunda-evaluacion/presentacion_estudiante_1.pptx) | La misma presentación, editable en PowerPoint o Google Slides |
 | [`infografia_estudiante_1.pdf`](segunda-evaluacion/infografias/infografia_estudiante_1.pdf) | Infografía individual del estudiante 1 para la defensa: problema y modelo |
 | [`infografia_estudiante_2.pdf`](segunda-evaluacion/infografias/infografia_estudiante_2.pdf) | Infografía individual del estudiante 2 para la defensa: implementación y resultados |
+| [`infografias_estudiantes_1_y_2.pdf`](segunda-evaluacion/infografias/infografias_estudiantes_1_y_2.pdf) | Las dos infografías en un solo PDF (página 1: estudiante 1, página 2: estudiante 2) |
 | [`dialogo_estudiante_1.md`](segunda-evaluacion/dialogo_estudiante_1.md) | Diálogo del estudiante 1, lámina por lámina |
 | [`guia_estudiante_1_contexto_y_modelo.md`](segunda-evaluacion/guia_estudiante_1_contexto_y_modelo.md) | Ideas clave del estudiante 1 y preguntas probables de la defensa |
 | [`phishing_en_vivo.ipynb`](segunda-evaluacion/phishing_en_vivo.ipynb) | Notebook con los títulos de cada paso, para escribir el código en vivo en Colab |
