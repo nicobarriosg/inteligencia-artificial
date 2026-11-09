@@ -1,0 +1,73 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Infografía estudiante 1</title><link rel="stylesheet" href="estilo.css"></head><body><div class="page">
+<header>
+<span class="tag">ESTUDIANTE 1 · PROBLEMA Y MODELO</span>
+<h1>Detección de correos de phishing con LSTM</h1>
+<p>Aplicaciones de Inteligencia Artificial · INACAP · Segunda evaluación 2026</p>
+<div class="who">[Nombre estudiante 1]</div>
+</header>
+<main>
+
+<section>
+<h2><span class="n">1</span>El problema</h2>
+<div class="q">¿Qué problema queremos resolver y por qué importa?</div>
+<div class="grid g3">
+<div class="card"><h3>Qué es el phishing</h3><p>Un correo que imita a un banco, a un despacho o al soporte TI para que la persona entregue su clave, sus datos o haga un pago. Llega mezclado con correos legítimos.</p></div>
+<div class="card amber"><h3>Lo que resolvemos</h3><p><b>Clasificar cada correo entrante como seguro o fraudulento a partir de su texto</b>, con una probabilidad de fraude. Lo sospechoso va a cuarentena antes de llegar a la bandeja.</p></div>
+<div class="card"><h3>A quién afecta</h3><ul><li>Trabajadores o estudiantes que reciben correos.</li><li>El área de TI, que revisa reportes a mano.</li><li>La organización y las personas cuyos datos administra.</li></ul></div>
+<div class="card red"><h3>Si no se hace nada</h3><ul><li>Basta con que <b>una</b> persona caiga para comprometer una cuenta.</li><li>Pagos falsos, filtración de datos, horas de TI.</li><li>Ley 21.663 (reportar incidentes a la ANCI) y Ley 21.719 (datos personales).</li></ul></div>
+<div class="card green"><h3>Por qué IA</h3><ul><li>Las reglas fijas se esquivan cambiando una palabra.</li><li>Un modelo aprende patrones de miles de ejemplos: urgencia, amenazas, pedidos de clave.</li><li>Entrega una probabilidad, no solo sí o no.</li></ul></div>
+<div class="card"><h3>Riesgos y beneficios</h3><ul><li><b>Falso negativo</b>: un fraude que pasa. Es el error más grave.</li><li>Falsas alarmas, ataques que cambian, privacidad.</li><li>Beneficio: menos fraudes en la bandeja y menos revisión manual.</li></ul></div>
+</div>
+</section>
+
+<section>
+<div class="card">
+<h3>Datos: Kaggle "Phishing Email Detection" · aprendizaje supervisado</h3>
+<div style="display:flex;gap:8mm;align-items:center">
+<div class="stat" style="min-width:42mm"><div class="big">18.650</div><div class="lbl">correos etiquetados</div></div>
+<div style="flex:1">
+<div class="bar"><span style="width:60.7%;background:var(--green)">11.322 seguros (61%)</span><span style="width:39.3%;background:var(--red)">7.328 phishing (39%)</span></div>
+<p style="font-size:11pt;color:var(--muted)">Cada correo trae su respuesta correcta. Limitaciones: están en inglés, mezclan phishing con spam y 1 de cada 5 seguros viene de una sola empresa (Enron).</p>
+</div></div></div>
+</section>
+
+<section>
+<h2><span class="n">2</span>El modelo: Embedding + LSTM</h2>
+<div class="q">¿Por qué este modelo es adecuado y cómo funciona? · Clasificación binaria de texto (secuencias)</div>
+<div class="flow">
+<div class="step"><b>Correo</b><span>texto limpio, enlaces = "enlaceweb"</span></div><div class="arrow">›</div>
+<div class="step"><b>200 números</b><span>vocabulario de 20.000 palabras</span></div><div class="arrow">›</div>
+<div class="step hl"><b>Embedding</b><span>cada palabra pasa a un vector de 64 valores</span></div><div class="arrow">›</div>
+<div class="step dark"><b>LSTM 64</b><span>lee en orden y resume el correo</span></div><div class="arrow">›</div>
+<div class="step"><b>Dropout 0,5</b><span>apaga la mitad al entrenar</span></div><div class="arrow">›</div>
+<div class="step hl"><b>Dense + sigmoide</b><span>probabilidad entre 0 y 1</span></div>
+</div>
+<p style="font-size:11pt;color:var(--muted);margin-top:2.5mm">1.313.089 parámetros: Embedding 1.280.000 · LSTM 33.024 · Dense 65. Basado en el ejemplo de noticias falsas visto en clases, con una LSTM en vez de dos.</p>
+</section>
+
+<section class="grid g2">
+<div class="card blue"><h3>Por qué una LSTM</h3><ul><li>Un correo es una <b>secuencia</b>: el orden de las palabras cambia el sentido.</li><li>Lee palabra por palabra y guarda una memoria con tres compuertas:<br><b>olvido</b> (qué borrar) · <b>entrada</b> (qué guardar) · <b>salida</b> (qué entregar).</li><li>Así relaciona palabras lejanas, cosa que una RNN simple pierde.</li></ul></div>
+<div class="card"><h3>Marco teórico</h3><ul><li><b>Neurona</b>: suma entradas por <b>pesos</b>, más un <b>sesgo</b>, y aplica una activación.</li><li><b>Activaciones</b>: sigmoide en la salida; sigmoide y tanh en las compuertas.</li><li><b>Propagación hacia adelante</b>: el correo pasa por las capas y sale p.</li><li><b>Sobreajuste</b>: memorizar el entrenamiento. Se frena con Dropout, validación separada y parada temprana.</li></ul></div>
+</section>
+
+<section>
+<h3 style="font-size:13.5pt;color:var(--navy);margin-bottom:2mm">Cómo aprende</h3>
+<div class="flow">
+<div class="step"><b>1 · Predice</b><span>sale una probabilidad, ej. 0,98</span></div><div class="arrow">›</div>
+<div class="step red"><b>2 · Mide el error</b><span>entropía cruzada binaria: castiga equivocarse con seguridad</span></div><div class="arrow">›</div>
+<div class="step"><b>3 · Retropropagación</b><span>cuánto aportó cada peso al error</span></div><div class="arrow">›</div>
+<div class="step"><b>4 · Adam</b><span>descenso del gradiente: ajusta cada peso un poco</span></div><div class="arrow">›</div>
+<div class="step hl"><b>Repite</b><span>lotes de 32 · hasta 6 épocas · early stopping</span></div>
+</div>
+</section>
+
+<section class="card"><h3>Métricas que vamos a mirar</h3>
+<div class="grid g4" style="gap:3mm">
+<p><b>Exactitud</b>: % de aciertos. No basta sola.</p>
+<p><b style="color:var(--red)">Recall de fraude</b>: de los fraudes, cuántos detecta. La más importante.</p>
+<p><b>Precisión</b>: de lo marcado como fraude, cuánto lo era.</p>
+<p><b>AUC</b>: separación de clases, 1 perfecto y 0,5 azar.</p>
+</div></section>
+</main>
+<footer><b>Salida esperada:</b> una probabilidad de fraude por correo. Sobre 0,5 se marca fraudulento; la organización puede mover ese umbral. <b>Honestidad:</b> una regresión logística empata en exactitud (0,967); la LSTM se eligió porque considera el orden.</footer>
+</div></body></html>

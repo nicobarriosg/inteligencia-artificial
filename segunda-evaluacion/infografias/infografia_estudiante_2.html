@@ -1,0 +1,98 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Infografía estudiante 2</title><link rel="stylesheet" href="estilo.css"></head><body><div class="page">
+<header>
+<span class="tag">ESTUDIANTE 2 · IMPLEMENTACIÓN Y RESULTADOS</span>
+<h1>Detección de correos de phishing con LSTM</h1>
+<p>Aplicaciones de Inteligencia Artificial · INACAP · Segunda evaluación 2026</p>
+<div class="who">[Nombre estudiante 2]</div>
+</header>
+<main>
+
+<section>
+<h2><span class="n">1</span>Implementación en vivo en Google Colab</h2>
+<div class="q">Python · TensorFlow / Keras · scikit-learn · GPU T4 · 17 pasos, uno por celda</div>
+<div class="flow">
+<div class="step"><b>Entorno</b><span>Colab, librerías, kagglehub</span></div><div class="arrow">›</div>
+<div class="step"><b>Datos</b><span>18.650 correos de Kaggle</span></div><div class="arrow">›</div>
+<div class="step hl"><b>Limpieza</b><span>texto limpio y sin duplicados</span></div><div class="arrow">›</div>
+<div class="step"><b>Números</b><span>vocabulario de 20.000, 200 por correo</span></div><div class="arrow">›</div>
+<div class="step dark"><b>Modelo</b><span>Embedding + LSTM</span></div><div class="arrow">›</div>
+<div class="step"><b>Entrenar</b><span>hasta 6 épocas</span></div><div class="arrow">›</div>
+<div class="step hl"><b>Evaluar y probar</b><span>métricas y correos nuevos</span></div>
+</div>
+</section>
+
+<section class="grid g2">
+<div class="card"><h3>Limpieza del texto: <code>limpiar()</code></h3><ul><li>Minúsculas, sin HTML, solo letras.</li><li>Cada enlace se reemplaza por la palabra <code>enlaceweb</code>.</li><li>Se quitan correos vacíos y duplicados: <b>18.650 → 17.103</b>.</li></ul></div>
+<div class="card amber"><h3>Atajo que encontramos: Enron</h3><p>"enron" aparece en el <b>20,3%</b> de los seguros y en el <b>0%</b> de los fraudes. El modelo aprendería "si dice enron, es seguro". Se borran <code>enron, vince, kaminski, hou, ect</code> para que aprenda del contenido.</p></div>
+</section>
+
+<section class="card">
+<h3>División de los 17.103 correos (estratificada, random_state = 42)</h3>
+<div class="bar"><span style="width:68%;background:var(--navy2)">Entrenamiento 11.629</span><span style="width:12%;background:var(--blue)">Validación 2.053</span><span style="width:20%;background:var(--amber)">Prueba 3.421</span></div>
+<p style="font-size:10.6pt;color:var(--muted)">El vocabulario se arma solo con entrenamiento. La validación decide cuándo parar. La prueba se usa una sola vez, al final.</p>
+</section>
+
+<section class="grid g2">
+<div>
+<pre><span class="c"># Paso 9: arquitectura</span>
+modelo = keras.Sequential([
+  keras.Input(shape=(LARGO,)),
+  layers.Embedding(VOCABULARIO, 64, mask_zero=True),
+  layers.LSTM(64),
+  layers.Dropout(0.5),
+  layers.Dense(1, activation='sigmoid')
+])
+<span class="c"># Paso 10: entrenamiento</span>
+modelo.compile(optimizer='adam',
+  loss='binary_crossentropy',
+  metrics=['accuracy', Recall, Precision])
+<span class="c"># Paso 11: early stopping</span>
+modelo.fit(X_ent_num, y_ent, epochs=6,
+  batch_size=32, validation_data=(X_val_num, y_val),
+  callbacks=[EarlyStopping(patience=2)])</pre>
+</div>
+<div class="card"><h3>Qué hace cada instrucción</h3><ul>
+<li><b>mask_zero</b>: ignora el relleno de ceros.</li>
+<li><b>LSTM(64)</b>: lee el correo en orden y lo resume en 64 valores.</li>
+<li><b>Dropout(0.5)</b>: apaga la mitad al entrenar para no memorizar.</li>
+<li><b>sigmoid</b>: entrega la probabilidad de fraude.</li>
+<li><b>binary_crossentropy + adam</b>: mide el error y ajusta los pesos.</li>
+<li><b>EarlyStopping</b>: si la validación no mejora en 2 épocas, para y recupera los mejores pesos.</li></ul></div>
+</section>
+
+<section>
+<h2><span class="n">2</span>Resultados en 3.421 correos de prueba</h2>
+<div class="grid g4">
+<div class="card stat" style="padding:2.5mm"><div class="big">0,967</div><div class="lbl">Exactitud</div></div>
+<div class="card stat red" style="padding:2.5mm"><div class="big" style="color:var(--red)">0,945</div><div class="lbl">Recall de fraude</div></div>
+<div class="card stat" style="padding:2.5mm"><div class="big">0,967</div><div class="lbl">Precisión de fraude</div></div>
+<div class="card stat" style="padding:2.5mm"><div class="big">0,991</div><div class="lbl">AUC</div></div>
+</div>
+</section>
+
+<section class="grid g2">
+<div class="card"><h3>Matriz de confusión (LSTM)</h3>
+<table><tr><th></th><th class="num">Predice seguro</th><th class="num">Predice fraude</th></tr>
+<tr><td><b>Seguro (2.132)</b></td><td class="num">2.091</td><td class="num">41 <span style="color:var(--muted)">falsas alarmas</span></td></tr>
+<tr><td><b>Fraude (1.289)</b></td><td class="num ko">71 se escapan</td><td class="num ok">1.218 detectados</td></tr></table></div>
+<div class="card"><h3>LSTM contra regresión logística</h3>
+<table><tr><th></th><th class="num">LSTM</th><th class="num">Reg. logística</th></tr>
+<tr><td>Exactitud</td><td class="num">0,967</td><td class="num">0,967</td></tr>
+<tr><td>Recall de fraude</td><td class="num">0,945</td><td class="num">0,940</td></tr>
+<tr><td>AUC</td><td class="num">0,991</td><td class="num">0,995</td></tr></table>
+<p style="font-size:10pt;color:var(--muted);margin-top:1mm">Casi iguales: aquí las palabras sueltas ya separan casi todo.</p></div>
+</section>
+
+<section class="card">
+<h3>Prueba con 4 correos nuevos, escritos por nosotros (paso 14)</h3>
+<table><tr><th>Correo</th><th>Real</th><th>Modelo</th><th class="num">P(fraude)</th><th></th></tr>
+<tr><td>Banco: cuenta suspendida, verificar en 24 horas</td><td>Fraude</td><td>Fraudulento</td><td class="num">99,1%</td><td class="ok">Acierta</td></tr>
+<tr><td>Paquete: pagar $2,99 para reenviar</td><td>Fraude</td><td>Fraudulento</td><td class="num">97,8%</td><td class="ok">Acierta</td></tr>
+<tr><td>Soporte TI: confirmar cuenta de estudiante</td><td>Fraude</td><td>Seguro</td><td class="num">4,1%</td><td class="ko">Se escapa</td></tr>
+<tr><td>Coordinación: aviso de presentaciones</td><td>Seguro</td><td>Seguro</td><td class="num">0,4%</td><td class="ok">Acierta</td></tr></table>
+<p style="font-size:10pt;color:var(--muted);margin-top:1.5mm">El fraude de Soporte TI está bien escrito, sin urgencia ni amenazas, y usa vocabulario académico que en el dataset aparece casi solo en correos seguros.</p>
+</section>
+
+</main>
+<footer><b>Conclusión:</b> responde <b>parcialmente</b> al problema. Detecta 1.218 de 1.289 fraudes (94,5%) con pocas falsas alarmas, pero se escapan los fraudes bien redactados. <b>Mejoras:</b> datos más variados y en español, leer más de 200 palabras y ajustar el umbral.</footer>
+</div></body></html>
