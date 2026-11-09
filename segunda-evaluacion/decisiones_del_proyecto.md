@@ -76,11 +76,11 @@ Proyecto: detección de correos fraudulentos (phishing) con una red LSTM en Kera
 
 **Evidencia:** [Requisito del enunciado]
 
-### Google Colab con GPU T4
+### Google Colab
 
-**Qué hicimos:** El video se graba en Google Colab con GPU T4 (*Entorno de ejecución → Cambiar tipo de entorno de ejecución → T4 GPU*). El paso 1 se asegura de tener `kagglehub` (con `%pip install -q`, que instala en el mismo entorno del notebook y oculta el detalle) e imprime la versión de TensorFlow y si hay GPU.
+**Qué hicimos:** El video se grabó en Google Colab. Al final no usamos la GPU T4. El paso 1 se asegura de tener `kagglehub` (con `%pip install -q`, que instala en el mismo entorno del notebook y oculta el detalle) e imprime la versión de TensorFlow y si hay GPU.
 
-**Por qué:** Colab ya trae TensorFlow, scikit-learn, pandas y matplotlib, así que no hay que instalar nada en el computador de cada uno, y la GPU acelera la LSTM, que repite sus cálculos palabra por palabra. Imprimir la versión y la GPU deja evidencia del entorno al inicio del video. Sin GPU el código funciona igual: en el ensayo local en CPU (TensorFlow 2.22.0-rc0) el entrenamiento tomó poco más de 1 minuto.
+**Por qué:** Colab ya trae TensorFlow, scikit-learn, pandas y matplotlib, así que no hay que instalar nada en el computador de cada uno, Imprimir la versión y si hay GPU deja evidencia del entorno al inicio del video. La T4 no hacía falta: acelera la LSTM, pero el dataset es chico y el código funciona igual sin ella, solo cambia el tiempo de entrenamiento. En el ensayo local en CPU (TensorFlow 2.22.0-rc0) entrenar tomó poco más de 1 minuto.
 
 **Alternativas que no usamos:** Un computador local con VS Code: es donde se ensayó, pero obliga a instalar todo y depende de la máquina de cada uno.
 

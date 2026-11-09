@@ -26,7 +26,7 @@ Un modelo de Deep Learning lee el texto de un correo y estima la probabilidad de
 ## Cómo ejecutarlo
 
 1. Abrir el notebook en Google Colab (*Archivo → Subir notebook*).
-2. Activar la GPU: *Entorno de ejecución → Cambiar tipo de entorno de ejecución → T4 GPU*.
+2. Opcional: activar la GPU (*Entorno de ejecución → Cambiar tipo de entorno de ejecución → T4 GPU*). No es necesaria.
 3. Ejecutar todas las celdas. El dataset se descarga con `kagglehub` y no necesita cuenta de Kaggle. Sin GPU, el entrenamiento toma alrededor de un minuto.
 
 También funciona en un computador local, instalando `tensorflow scikit-learn pandas matplotlib kagglehub`.
